@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import React from "react";
 import Image from 'next/image';
 import Link from 'next/link';
+import {MenuIcon} from 'lucide-react'
 
 function Navbar(){
 return (
@@ -52,6 +53,7 @@ border-neutral-900 justify-between">
             {true ? 'Dashboard' : 'Get Started'}
           </span>
         </Link>
+        <MenuIcon className='md:hidden'/>
     </aside>
 </header>
 )
