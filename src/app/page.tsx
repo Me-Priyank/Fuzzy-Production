@@ -45,7 +45,7 @@ function Home() {
         </div>
       </section>
       <InfiniteMovingCards 
-      className="md:mt-[18rem] w-screen mt-[-50px]"
+      className="md:mt-[18rem] w-screen lg:ml-[8%] lg:mt[-10%]"
 
       items={clients}
       
