@@ -59,4 +59,4 @@ border-neutral-900 justify-between">
 )
 }
 
-export default dynamic (() => Promise.resolve(Navbar), {ssr: false})
+export default Navbar;
