@@ -12,7 +12,7 @@ const Settings = (props: Props) => {
   if (!userId) return null;
 
   const { user } = useUser(); // Fetch detailed user data
-  if (!user) return null;
+  if (!user) return null; 
 
   // Function to remove profile image
   const removeProfileImage = () => {
