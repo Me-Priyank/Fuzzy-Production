@@ -52,9 +52,9 @@ const MenuOptions = (props: Props) => {
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
-                  className="bg-black/10 text-white border-gray border backdrop-blur-xl"
+                  className="bg-black/10 backdrop-blur-xl"
                 >
-                  <p className='text-white'>{menuItem.name}</p>
+                  <p>{menuItem.name}</p>
                 </TooltipContent>
               </Tooltip>
             </ul>
