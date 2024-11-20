@@ -1,58 +1,65 @@
+'use client';
+
 import ProfileForm from '@/components/forms/profile-form';
 import React from 'react';
 import ProfilePicture from './_components/profile-picture';
-import { db } from '@/lib/db';
-import { auth } from '@clerk/nextjs/server';
+import { useAuth, useUser } from '@clerk/nextjs';
 
 type Props = {};
 
-const Settings = async (props: Props) => {
-  const authResult = await auth(); // Await the result of the auth() function
-  const userId = authResult?.userId; // Extract userId from the resolved object
-
+const Settings = (props: Props) => {
+  const { userId } = useAuth(); // Get the authenticated user ID
   if (!userId) return null;
 
-  const user = await db.user.findUnique({ where: { clerkId: userId } });
+  const { user } = useUser(); // Fetch detailed user data
+  if (!user) return null;
 
-  const removeProfileImage = async () => {
-    'use server';
-    const response = await db.user.update({
-      where: {
-        clerkId: userId,
-      },
-      data: {
-        profileImage: '',
-      },
-    });
-    return response;
+  // Function to remove profile image
+  const removeProfileImage = () => {
+    fetch('/api/user/remove-profile-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Profile image removed:', data);
+      })
+      .catch(error => {
+        console.error('Error removing profile image:', error);
+      });
   };
 
-  const uploadProfileImage = async (image: string) => {
-    'use server';
-    const response = await db.user.update({
-      where: {
-        clerkId: userId,
-      },
-      data: {
-        profileImage: image,
-      },
-    });
-
-    return response;
+  // Function to upload a new profile image
+  const uploadProfileImage = (image: string) => {
+    fetch('/api/user/upload-profile-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, image }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Profile image uploaded:', data);
+      })
+      .catch(error => {
+        console.error('Error uploading profile image:', error);
+      });
   };
 
-  const updateUserInfo = async (name: string) => {
-    'use server';
-
-    const updateUser = await db.user.update({
-      where: {
-        clerkId: userId,
-      },
-      data: {
-        name,
-      },
-    });
-    return updateUser;
+  // Function to update user information
+  const updateUserInfo = (name: string) => {
+    fetch('/api/user/update-info', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, name }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('User info updated:', data);
+      })
+      .catch(error => {
+        console.error('Error updating user info:', error);
+      });
   };
 
   return (
@@ -67,7 +74,7 @@ const Settings = async (props: Props) => {
         </div>
         <ProfilePicture
           onDelete={removeProfileImage}
-          userImage={user?.profileImage || ''}
+          userImage= {''}
           onUpload={uploadProfileImage}
         />
         <ProfileForm user={user} onUpdate={updateUserInfo} />
